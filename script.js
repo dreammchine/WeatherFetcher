@@ -3,7 +3,7 @@ const weatherInfoDiv = document.getElementById('weatherInfo');
 const cityForm = document.getElementById('cityForm');
 const cityInput = document.getElementById('cityInput');
 
-cityForm.addEventListener('submit', (event) = > {
+cityForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const city = cityInput.value.trim();
 
@@ -20,10 +20,10 @@ function getWeather(city) {
 
     fetch(apiURL)
         .then(response => response.json())
-        .then(data = > {
+        .then(data => {
             displayWeather(data);
         })
-        .catch(error = > {
+        .catch(error =>{
             console.error('Error fetching weather data:', error);
             alert('Error fetching weather data. Please try again.');
         });
