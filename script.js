@@ -3,6 +3,7 @@ const weatherInfoDiv = document.getElementById('weatherInfo');
 const cityForm = document.getElementById('cityForm');
 const cityInput = document.getElementById('cityInput');
 
+// Add event listener to the form
 cityForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const city = cityInput.value.trim();
@@ -15,6 +16,7 @@ cityForm.addEventListener('submit', (event) => {
     getWeather(city);
 });
 
+// Function to get weather by city name
 function getWeather(city) {
     const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
 
@@ -23,12 +25,13 @@ function getWeather(city) {
         .then(data => {
             displayWeather(data);
         })
-        .catch(error =>{
+        .catch(error => {
             console.error('Error fetching weather data:', error);
             alert('Error fetching weather data. Please try again.');
         });
 }
 
+// Function to display weather information
 function displayWeather(data) {
     const cityName = data.name;
     const temperature = data.main.temp;
@@ -41,3 +44,30 @@ function displayWeather(data) {
 
     weatherInfoDiv.innerHTML = weatherInfoHTML;
 }
+
+// Use geolocation to fetch user's current city
+function getCityFromGeolocation() {
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`)
+                .then(response => response.json())
+                .then(data => {
+                    const cityName = data.name;
+                    cityInput.value = cityName; // Set the input value to the current city
+                    getWeather(cityName); // Fetch and display weather for the current city
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    alert('Error fetching weather data. Please try again.');
+                });
+        });
+    } else {
+        alert('Geolocation is not available in this browser.');
+    }
+}
+
+// Get the user's current city on page load
+getCityFromGeolocation();
