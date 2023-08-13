@@ -16,14 +16,63 @@ cityForm.addEventListener('submit', (event) => {
     getWeather(city);
 });
 
-// Function to get weather by city name
+function displayWeather(data, forecastData) {
+    const cityName = data.name;
+    const temperature = data.main.temp;
+    const description = data.weather[0].description;
+
+    let forecastHTML = '';
+    forecastData.forEach(forecast => {
+        const forecastDate = new Date(forecast.dt * 1000);
+        const forecastTemperature = forecast.main.temp;
+        const forecastDescription = forecast.weather[0].description;
+
+        forecastHTML += `
+            <div class="forecast-item">
+                <p>Date: ${forecastDate.toLocaleDateString()}</p>
+                <p>Temperature: ${forecastTemperature} °C</p>
+                <p>Description: ${forecastDescription}</p>
+            </div>
+        `;
+    });
+
+    const weatherInfoHTML = `
+        <h2>${cityName}</h2>
+        <p>Temperature: ${temperature} °C</p>
+        <p>Description: ${description}</p>
+        <h3>Five-Day Forecast:</h3>
+        <div class="forecast-container">${forecastHTML}</div>
+    `;
+
+    weatherInfoDiv.innerHTML = weatherInfoHTML;
+}
+
+// ...
+
+// Fetch and display weather and forecast for the current city
 function getWeather(city) {
     const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
 
     fetch(apiURL)
         .then(response => response.json())
         .then(data => {
-            displayWeather(data);
+            // Fetch five-day forecast data
+            const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`;
+            fetch(forecastURL)
+                .then(response => response.json())
+                .then(forecastData => {
+                    // Extract forecast for each day (assuming forecastData.list is an array of forecast entries)
+                    const dailyForecasts = [];
+                    for (let i = 0; i < forecastData.list.length; i += 8) {
+                        dailyForecasts.push(forecastData.list[i]);
+                    }
+
+                    displayWeather(data, dailyForecasts);
+                })
+                .catch(error => {
+                    console.error('Error fetching forecast data:', error);
+                    alert('Error fetching forecast data. Please try again.');
+                });
         })
         .catch(error => {
             console.error('Error fetching weather data:', error);
@@ -31,19 +80,7 @@ function getWeather(city) {
         });
 }
 
-// Function to display weather information
-function displayWeather(data) {
-    const cityName = data.name;
-    const temperature = data.main.temp;
-    const description = data.weather[0].description;
-    const weatherInfoHTML = `
-        <h2>${cityName}</h2>
-        <p>Temperature: ${temperature} °C</p>
-        <p>Description: ${description}</p>
-    `;
-
-    weatherInfoDiv.innerHTML = weatherInfoHTML;
-}
+// ...
 
 // Use geolocation to fetch user's current city
 function getCityFromGeolocation() {
