@@ -21,29 +21,28 @@ function displayWeather(data, forecastData) {
     const temperature = data.main.temp;
     const description = data.weather[0].description;
 
-    let forecastHTML = '';
+    let forecastTableHTML = '<h3>Five-Day Forecast:</h3><table><tr><th>Date</th><th>Temperature (°C)</th><th>Description</th></tr>';
     forecastData.forEach(forecast => {
         const forecastDate = new Date(forecast.dt * 1000);
         const forecastTemperature = forecast.main.temp;
         const forecastDescription = forecast.weather[0].description;
 
-        forecastHTML += `
-            <div class="forecast-item">
-                <p>Date: ${forecastDate.toLocaleDateString()}</p>
-                <p>Temperature: ${forecastTemperature} °C</p>
-                <p>Description: ${forecastDescription}</p>
-            </div>
+        forecastTableHTML += `
+            <tr>
+                <td>${forecastDate.toLocaleDateString()}</td>
+                <td>${forecastTemperature}</td>
+                <td>${forecastDescription}</td>
+            </tr>
         `;
     });
+    forecastTableHTML += '</table>';
 
     const weatherInfoHTML = `
         <h2>${cityName}</h2>
         <p>Temperature: ${temperature} °C</p>
         <p>Description: ${description}</p>
-        <h3>Five-Day Forecast:</h3>
-        <div class="forecast-container">${forecastHTML}</div>
+        ${forecastTableHTML}
     `;
-
     weatherInfoDiv.innerHTML = weatherInfoHTML;
 }
 
