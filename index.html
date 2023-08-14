@@ -6,22 +6,32 @@
     <title>Weather Fetcher</title>
         <style> 
            /*  <link rel="stylesheet" href="main.css"> */
+            body {background-color: powderblue;}
+            h1   {
+                color: blue;
+            font-family: verdana;
+                font-size: 45px;
+                margin: 50px;
+            }
             table {
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 20px;
+                color: black;
+                background-color: ghostwhite;
             }
             th, td {
+                color: black;
                 padding: 8px;
                 border: 1px solid #ccc;
             }
         </style> 
     </head>
     <body>
-    <h1>Weather Fetcher</h1>
+    <h1 style="text-align:center;">Weather Fetcher</h1>
     <form id="cityForm">
-        <input type="text" id="cityInput" placeholder="Enter city name">
-        <button type="submit">Get Weather</button>
+        <input style="text-align:center;" type="text" id="cityInput" placeholder="Enter city name">
+        <button style="text-align:center;" type="submit">Get Weather</button>
     </form>
     <div id="weatherInfo"></div>
 
