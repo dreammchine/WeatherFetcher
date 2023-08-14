@@ -47,7 +47,7 @@ function displayWeather(data, forecastData) {
     weatherInfoDiv.innerHTML = weatherInfoHTML;
 }
 
-// ...
+
 
 // Fetch and display weather and forecast for the current city
 function getWeather(city) {
@@ -79,8 +79,6 @@ function getWeather(city) {
             alert('Error fetching weather data. Please try again.');
         });
 }
-
-// ...
 
 // Use geolocation to fetch user's current city
 function getCityFromGeolocation() {
